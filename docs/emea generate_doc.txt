@@ -1,0 +1,768 @@
+const {
+  Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+  HeadingLevel, AlignmentType, BorderStyle, WidthType, ShadingType,
+  LevelFormat, PageNumber, Footer, Header, TabStopType, TabStopPosition,
+  PageBreak
+} = require('docx');
+const fs = require('fs');
+
+const BLUE_DARK = "1A3C6E";
+const BLUE_MID = "2E6FBF";
+const BLUE_LIGHT = "D6E8F7";
+const TEAL_DARK = "0F6E56";
+const TEAL_LIGHT = "E1F5EE";
+const PURPLE_DARK = "3C2E89";
+const PURPLE_LIGHT = "EEEDFE";
+const AMBER_DARK = "7A4A0A";
+const AMBER_LIGHT = "FDF3E3";
+const GRAY_LIGHT = "F5F5F5";
+const GRAY_MED = "CCCCCC";
+const WHITE = "FFFFFF";
+const TEXT_DARK = "1A1A1A";
+const TEXT_MID = "444444";
+
+const border = { style: BorderStyle.SINGLE, size: 1, color: GRAY_MED };
+const borders = { top: border, bottom: border, left: border, right: border };
+const noBorder = { style: BorderStyle.NONE, size: 0, color: WHITE };
+const noBorders = { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder };
+
+function spacer(pts = 120) {
+  return new Paragraph({ children: [new TextRun("")], spacing: { before: pts, after: 0 } });
+}
+
+function divider() {
+  return new Paragraph({
+    children: [new TextRun("")],
+    border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: BLUE_LIGHT, space: 1 } },
+    spacing: { before: 200, after: 200 }
+  });
+}
+
+function coverPage() {
+  return [
+    spacer(1440),
+    new Paragraph({
+      children: [new TextRun({ text: "EMEA GLOBAL", font: "Arial", size: 18, color: BLUE_MID, bold: true, characterSpacing: 200 })],
+      alignment: AlignmentType.CENTER,
+    }),
+    spacer(120),
+    new Paragraph({
+      children: [new TextRun({ text: "Engineering & Industrial Services", font: "Arial", size: 52, bold: true, color: BLUE_DARK })],
+      alignment: AlignmentType.CENTER,
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: "Capability Document & Service Landing Pages", font: "Arial", size: 28, color: TEXT_MID })],
+      alignment: AlignmentType.CENTER,
+      spacing: { before: 160, after: 0 }
+    }),
+    spacer(480),
+    new Paragraph({
+      children: [new TextRun({ text: "Serving clients across United States · EMEA · Australia", font: "Arial", size: 22, color: TEXT_MID, italics: true })],
+      alignment: AlignmentType.CENTER,
+    }),
+    spacer(360),
+    new Paragraph({
+      children: [
+        new TextRun({ text: "  Engineering & Design   |   Manufacturing & Industrialization   |   Digital & Industry 4.0   |   Consulting & Transformation  ", font: "Arial", size: 18, color: WHITE, bold: true })
+      ],
+      alignment: AlignmentType.CENTER,
+      shading: { fill: BLUE_MID, type: ShadingType.CLEAR },
+      spacing: { before: 200, after: 200 },
+      indent: { left: 360, right: 360 }
+    }),
+    spacer(720),
+    new Paragraph({
+      children: [new TextRun({ text: "Confidential — For Client & Prospect Use", font: "Arial", size: 18, color: GRAY_MED, italics: true })],
+      alignment: AlignmentType.CENTER,
+    }),
+    new Paragraph({ children: [new PageBreak()] }),
+  ];
+}
+
+function sectionIntro(num, title, color, intro, keywords) {
+  return [
+    new Paragraph({
+      children: [new TextRun({ text: `DIVISION 0${num}`, font: "Arial", size: 18, bold: true, color: color, characterSpacing: 200 })],
+      spacing: { before: 360, after: 80 }
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: title, font: "Arial", size: 40, bold: true, color: BLUE_DARK })],
+      spacing: { before: 0, after: 160 }
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: intro, font: "Arial", size: 22, color: TEXT_MID })],
+      spacing: { before: 0, after: 120 },
+      alignment: AlignmentType.JUSTIFIED
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: `SEO Keywords: ${keywords}`, font: "Arial", size: 18, color: GRAY_MED, italics: true })],
+      spacing: { before: 0, after: 240 }
+    }),
+    divider(),
+  ];
+}
+
+function servicePage(title, tagline, seoKeywords, intro, activities, deliverables, regions, color, colorLight) {
+  return [
+    spacer(200),
+    // Header bar
+    new Paragraph({
+      children: [new TextRun({ text: `  ${title}  `, font: "Arial", size: 32, bold: true, color: WHITE })],
+      shading: { fill: color, type: ShadingType.CLEAR },
+      spacing: { before: 160, after: 0 },
+      indent: { left: 240, right: 240 }
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: `  ${tagline}  `, font: "Arial", size: 22, color: color, italics: true })],
+      shading: { fill: colorLight, type: ShadingType.CLEAR },
+      spacing: { before: 0, after: 80 },
+      indent: { left: 240, right: 240 }
+    }),
+    // SEO
+    new Paragraph({
+      children: [new TextRun({ text: `SEO: ${seoKeywords}`, font: "Arial", size: 16, color: GRAY_MED, italics: true })],
+      spacing: { before: 80, after: 120 }
+    }),
+    // Intro paragraph
+    new Paragraph({
+      children: [new TextRun({ text: intro, font: "Arial", size: 22, color: TEXT_DARK })],
+      spacing: { before: 0, after: 200 },
+      alignment: AlignmentType.JUSTIFIED
+    }),
+    // Activities heading
+    new Paragraph({
+      children: [new TextRun({ text: "Key Activities & Deliverables", font: "Arial", size: 24, bold: true, color: color })],
+      spacing: { before: 160, after: 120 }
+    }),
+    // Activities as 2-col table
+    ...chunkPairs(activities).map(pair => {
+      const makeCell = (text) => new TableCell({
+        borders: { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder },
+        width: { size: 4500, type: WidthType.DXA },
+        margins: { top: 60, bottom: 60, left: 80, right: 80 },
+        children: [new Paragraph({
+          numbering: { reference: "bullets", level: 0 },
+          children: [new TextRun({ text: text || "", font: "Arial", size: 20, color: TEXT_DARK })]
+        })]
+      });
+      return new Table({
+        width: { size: 9000, type: WidthType.DXA },
+        columnWidths: [4500, 4500],
+        rows: [new TableRow({ children: [makeCell(pair[0]), makeCell(pair[1])] })]
+      });
+    }),
+    spacer(120),
+    // Deliverables
+    new Paragraph({
+      children: [new TextRun({ text: "Typical Deliverables", font: "Arial", size: 24, bold: true, color: color })],
+      spacing: { before: 200, after: 120 }
+    }),
+    new Paragraph({
+      children: [new TextRun({ text: deliverables, font: "Arial", size: 20, color: TEXT_MID })],
+      spacing: { before: 0, after: 160 },
+      alignment: AlignmentType.JUSTIFIED
+    }),
+    // Regions
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Available in: ", font: "Arial", size: 20, bold: true, color: TEXT_DARK }),
+        new TextRun({ text: regions, font: "Arial", size: 20, color: TEXT_MID })
+      ],
+      shading: { fill: colorLight, type: ShadingType.CLEAR },
+      spacing: { before: 120, after: 120 },
+      indent: { left: 240, right: 240 }
+    }),
+    divider(),
+  ];
+}
+
+function chunkPairs(arr) {
+  const pairs = [];
+  for (let i = 0; i < arr.length; i += 2) pairs.push([arr[i], arr[i + 1] || ""]);
+  return pairs;
+}
+
+const children = [
+  ...coverPage(),
+
+  // ─── TOC Page ───
+  new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun({ text: "Table of Contents", font: "Arial", size: 36, bold: true, color: BLUE_DARK })] }),
+  spacer(120),
+  ...[
+    ["DIVISION 01 — Engineering & Design", BLUE_MID],
+    ["  Product Engineering", TEXT_MID],
+    ["  New Product Development (NPD)", TEXT_MID],
+    ["  Reverse Engineering", TEXT_MID],
+    ["  Value Engineering & Cost Reduction", TEXT_MID],
+    ["  Process Engineering & FEED / P&ID", TEXT_MID],
+    ["  Skid & Modular Systems Engineering", TEXT_MID],
+    ["  Simulation & Analysis (FEA / CFD)", TEXT_MID],
+    ["  Performance Optimization", TEXT_MID],
+    ["  CAD & PLM Services", TEXT_MID],
+    ["  3D Modeling & Drafting", TEXT_MID],
+    ["  CAD Migration & Standardization", TEXT_MID],
+    ["  Oil & Gas Downstream Support", TEXT_MID],
+    ["DIVISION 02 — Manufacturing & Industrialization", TEAL_DARK],
+    ["  Tooling & Fixture Engineering", TEXT_MID],
+    ["  Mechanical & Hydraulic Fixtures", TEXT_MID],
+    ["  Production Tooling Design", TEXT_MID],
+    ["  Special Purpose Machines (SPM)", TEXT_MID],
+    ["  Assembly Automation Systems", TEXT_MID],
+    ["  Production Engineering", TEXT_MID],
+    ["  Line Design & Optimization", TEXT_MID],
+    ["  Industrial Engineering", TEXT_MID],
+    ["  Cycle Time Optimization", TEXT_MID],
+    ["  Lean Manufacturing & Throughput", TEXT_MID],
+    ["DIVISION 03 — Digital & Industry 4.0", PURPLE_DARK],
+    ["  Digital Engineering", TEXT_MID],
+    ["  Digital Twin Development", TEXT_MID],
+    ["  Industrial Automation (PLC/SCADA/HMI)", TEXT_MID],
+    ["  Simulation & Virtual Commissioning", TEXT_MID],
+    ["  Robotics & Factory Automation", TEXT_MID],
+    ["  Data & AI Systems", TEXT_MID],
+    ["  Predictive Maintenance", TEXT_MID],
+    ["  Computer Vision & Inspection", TEXT_MID],
+    ["  Industrial AI & Decision Systems", TEXT_MID],
+    ["DIVISION 04 — Consulting & Transformation", AMBER_DARK],
+    ["  Engineering Consulting", TEXT_MID],
+    ["  Plant Modernization Strategy", TEXT_MID],
+    ["  Digital Transformation", TEXT_MID],
+    ["  Optimization & Value Engineering", TEXT_MID],
+  ].map(([text, color]) => new Paragraph({
+    children: [new TextRun({ text, font: "Arial", size: text.startsWith("  ") ? 20 : 22, color, bold: !text.startsWith("  ") })],
+    spacing: { before: text.startsWith("  ") ? 40 : 120, after: 0 }
+  })),
+  new Paragraph({ children: [new PageBreak()] }),
+
+  // ─── DIVISION 01 ───
+  ...sectionIntro(1, "Engineering & Design", BLUE_MID,
+    "From concept validation to production-ready designs, our Engineering & Design division supports the full product lifecycle. We partner with clients in aerospace, automotive, energy, and industrial sectors — delivering precise, standards-compliant engineering that reduces time-to-market and de-risks production launch.",
+    "product engineering services, CAD PLM solutions, FEA CFD simulation, process engineering consultants, FEED P&ID engineering, NPD services US EMEA Australia"
+  ),
+
+  ...servicePage(
+    "Product Engineering",
+    "Full-lifecycle product design from concept to production release",
+    "product engineering services, mechanical product design, design for manufacturability, product development consultants",
+    "Our Product Engineering team delivers end-to-end support across the complete product development cycle — from requirement capture and concept exploration through to detailed design, tolerance analysis, and production release. We work within your existing processes or bring our own structured methodology, with full traceability from customer requirement to design output. Whether you need embedded engineering resource or a fully managed design workstream, we scale to your programme.",
+    [
+      "Requirement analysis and functional specification", "Concept generation and design trade studies",
+      "Detailed mechanical design (3D CAD & 2D drawings)", "Design for Manufacturability (DFM) and assembly (DFA)",
+      "GD&T and tolerance stack-up analysis", "Design validation planning and testing support",
+      "FMEA and risk assessment (DFMEA)", "Design freeze and production release management",
+      "Interface control documentation (ICD)", "Standards compliance (ISO, ASME, BS, AS)"
+    ],
+    "Concept reports, detailed CAD models and drawings, BOM structures, DFMEA reports, DFM assessments, DVP&R plans, and production release packages.",
+    "United States · EMEA (UK, Germany, France, Middle East) · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "New Product Development (NPD)",
+    "Structured NPD programmes from market insight to product launch",
+    "new product development engineering, NPD stage-gate process, product launch services, FMEA NPD consultants",
+    "We manage complete New Product Development programmes using proven Stage-Gate methodology — from market and voice-of-customer research through concept validation, design development, prototype build, and final production qualification. Our NPD teams combine design engineering, systems thinking, and project management to deliver on-time, on-cost product launches that meet quality and regulatory requirements across global markets.",
+    [
+      "Market and voice-of-customer (VoC) research", "Product specification and QFD analysis",
+      "Stage-Gate programme governance and reviews", "Functional prototype design and build coordination",
+      "DFMEA and reliability engineering", "Regulatory compliance mapping (CE, UL, RCM)",
+      "Supplier engagement and design-to-cost management", "First Article Inspection (FAI) support",
+      "Pilot production transition support", "Post-launch performance review"
+    ],
+    "NPD programme plan, design specification, prototype reports, FMEA documentation, regulatory compliance file, FAI report, and project close-out review.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Reverse Engineering",
+    "CAD reconstruction, benchmarking, and obsolescence recovery",
+    "reverse engineering services, 3D scanning CAD reconstruction, legacy parts re-engineering, point cloud to CAD",
+    "Our Reverse Engineering service recovers design intent from physical parts, tooling, or legacy assemblies — creating accurate CAD models and engineering documentation where original files no longer exist. We use industrial 3D scanning, structured-light measurement, and manual metrology to capture geometry, then process point clouds into parametric CAD across CATIA, NX, SolidWorks, and Creo. Ideal for obsolescence recovery, competitive analysis, or re-engineering components for modern materials and manufacturing processes.",
+    [
+      "3D scanning and structured-light measurement", "Point cloud processing and surface fitting",
+      "Parametric CAD reconstruction in CATIA / NX / SolidWorks / Creo", "Legacy tooling and jig reverse engineering",
+      "Material and finish characterisation support", "Tolerance and GD&T definition",
+      "Competitive product benchmarking and teardown", "Drawing creation to current standards",
+      "Re-engineering for modern manufacturing processes", "As-built vs as-designed comparison"
+    ],
+    "Certified CAD models, 2D production drawings, inspection reports, scan data files, and engineering change documentation.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Value Engineering & Cost Reduction",
+    "Systematic cost-out without compromising form, fit, or function",
+    "value engineering services, product cost reduction, BOM rationalisation, design cost optimisation consultants",
+    "We apply structured Value Engineering (VE) methodology to identify and eliminate unnecessary cost across products, assemblies, and production processes. Our teams analyse function versus cost at every level of the BOM — proposing material substitutions, manufacturing process changes, supplier consolidations, and design simplifications that reduce unit cost while maintaining or improving product performance. Typical programmes deliver 10–25% cost reduction within 3–6 months.",
+    [
+      "Functional analysis and cost-function mapping", "BOM teardown and cost benchmarking",
+      "Material substitution and specification review", "Manufacturing process redesign",
+      "Make vs buy analysis", "Supplier consolidation and dual-source strategy",
+      "Complexity reduction and part standardisation", "Design simplification for assembly",
+      "Should-cost modelling and target costing", "Change implementation and validation support"
+    ],
+    "VE study reports, revised BOM with cost comparison, design change proposals, should-cost models, and implementation roadmaps with savings tracking.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Process Engineering & FEED / P&ID",
+    "Front-end engineering and detailed process design for industrial plants",
+    "FEED engineering services, P&ID development, process engineering consultants, HAZOP HAZID services, oil gas process design",
+    "Our Process Engineering team delivers Front-End Engineering & Design (FEED) studies and detailed process design for chemical, oil & gas, pharmaceutical, and industrial manufacturing facilities. We develop Process Flow Diagrams (PFDs), Piping & Instrumentation Diagrams (P&IDs), equipment datasheets, and process simulation models — ensuring designs are safe, operable, and compliant with international standards before capital commitments are made.",
+    [
+      "FEED studies and basis-of-design documentation", "Process Flow Diagram (PFD) development",
+      "P&ID design, review, and ATEX/area classification", "Equipment sizing and datasheet preparation",
+      "Process simulation (Aspen, HYSYS, ProMax)", "HAZOP and HAZID facilitation",
+      "Safety Integrity Level (SIL) determination studies", "Cause & Effect (C&E) matrix development",
+      "Utility balance and energy optimisation studies", "Regulatory and code compliance reviews"
+    ],
+    "FEED study reports, PFDs, P&IDs, equipment datasheets, HAZOP/HAZID reports, process simulation models, and basis-of-design documentation.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Skid & Modular Systems Engineering",
+    "Engineered process skids and modular units ready for global deployment",
+    "modular skid engineering, process skid design, modular plant engineering, ASME PED skid fabrication support",
+    "We engineer complete modular process skids and packaged units — from initial concept layout through detailed mechanical, piping, structural, and instrumentation design to Factory Acceptance Test (FAT) documentation. Our modular approach reduces site installation time and risk, with designs compliant with ASME, PED, AS/NZS, and customer-specific standards. We coordinate with fabricators and manage the complete technical documentation package.",
+    [
+      "Process skid layout and 3D design (AVEVA, Navisworks, SolidWorks)", "Piping design, isometrics, and stress analysis",
+      "Structural steel design and load analysis", "Hydraulic and pneumatic system integration",
+      "Instrumentation and control system integration", "FAT and SAT procedure development",
+      "ASME, PED, and AS/NZS code compliance", "Weight and centre-of-gravity calculations",
+      "Lifting and transportation analysis", "As-built documentation and O&M manuals"
+    ],
+    "General arrangement drawings, piping isometrics, structural calculations, instrument loop diagrams, FAT/SAT procedures, and full documentation packages.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Simulation & Analysis (FEA / CFD)",
+    "Physics-based simulation to validate performance before build",
+    "FEA finite element analysis services, CFD computational fluid dynamics, structural simulation, thermal analysis engineering",
+    "Our simulation engineers use industry-leading FEA and CFD tools to predict structural, thermal, and fluid behaviour — providing confidence in design decisions before physical prototypes are built. We handle linear and non-linear static analysis, fatigue and fracture assessment, transient thermal studies, and complex flow simulations. Results are delivered with clear engineering summaries and actionable design recommendations.",
+    [
+      "Linear and non-linear static FEA (Ansys, Abaqus, NX Nastran)", "Dynamic and modal analysis",
+      "Fatigue and fracture mechanics assessment", "Thermal analysis — steady-state and transient",
+      "CFD for internal flow, pressure drop, and mixing", "Aerodynamic and external flow simulation",
+      "Fluid-structure interaction (FSI) analysis", "Weld and joint strength assessment",
+      "Pressure vessel and piping analysis (ASME VIII)", "Design optimisation and parameter sensitivity studies"
+    ],
+    "Simulation reports with model descriptions, load cases, results summaries, and design recommendations. Deliverables meet customer and certification authority requirements.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "CAD & PLM Services",
+    "Enterprise CAD delivery, PLM implementation, and digital engineering infrastructure",
+    "CAD services outsourcing, PLM implementation Teamcenter Windchill, CATIA NX SolidWorks, CAD migration standardisation",
+    "We deliver high-quality CAD modelling, detailing, and documentation across all major platforms — CATIA V5/V6, NX, SolidWorks, Creo, and AutoCAD — as embedded resource or managed service. Our PLM team implements, configures, and migrates data across Teamcenter, Windchill, Enovia, and Vault, building the digital backbone that connects engineering, manufacturing, and supply chain for enterprise clients.",
+    [
+      "3D parametric modelling (CATIA, NX, SolidWorks, Creo)", "2D detailing, GD&T annotations, and drawing release",
+      "PLM system implementation (Teamcenter, Windchill, Enovia)", "CAD and PDM data migration",
+      "CAD standards development and template creation", "Neutral format conversion (STEP, IGES, JT)",
+      "CAD audit, cleanup, and library management", "CAD training and process documentation",
+      "CAD migration & standardisation programmes", "BOM management and engineering change workflows"
+    ],
+    "Production-released CAD models and drawings, PLM configuration documentation, data migration reports, CAD standards guides, and training materials.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  ...servicePage(
+    "Oil & Gas Downstream Support",
+    "Engineering services for refining, petrochemical, and LNG operations",
+    "oil gas downstream engineering, refinery engineering services, LNG petrochemical design consultants, downstream process support",
+    "Our Oil & Gas Downstream team provides specialised engineering support across refining, petrochemical, and LNG facilities — from brownfield modification projects and equipment integrity assessments to process optimisation studies and turnaround engineering packages. We understand the operational, safety, and regulatory environment of downstream assets and deliver practical, field-verified solutions.",
+    [
+      "Brownfield modification and tie-in engineering", "Process optimisation and debottlenecking studies",
+      "Equipment integrity and fitness-for-service assessment", "Turnaround scope definition and execution support",
+      "Relief and flare system review (API 520/521)", "Heat exchanger and rotating equipment studies",
+      "Corrosion management and materials selection", "Piping stress analysis and support design",
+      "Regulatory compliance engineering (API, ASME, IP codes)", "Site survey and as-built documentation"
+    ],
+    "Engineering study reports, modification packages, P&ID redlines, stress analysis reports, relief load summaries, and turnaround technical dossiers.",
+    "United States · EMEA · Australia",
+    BLUE_DARK, BLUE_LIGHT
+  ),
+
+  // ─── DIVISION 02 ───
+  new Paragraph({ children: [new PageBreak()] }),
+  ...sectionIntro(2, "Manufacturing & Industrialization", TEAL_DARK,
+    "We help manufacturers bridge the gap between design and production. Our Manufacturing & Industrialization team specialises in tooling design, SPM development, production engineering, and lean transformation — enabling clients across automotive, aerospace, FMCG, and heavy industry to achieve scalable, cost-efficient, and quality-assured production operations.",
+    "tooling fixture engineering, special purpose machine design, lean manufacturing consulting, production engineering services, assembly automation, industrial engineering"
+  ),
+
+  ...servicePage(
+    "Tooling & Fixture Engineering",
+    "Precision jigs, fixtures, gauges, and tooling for manufacturing and assembly",
+    "tooling fixture engineering, jig fixture design, inspection gauge design, manufacturing tooling consultants",
+    "We design, validate, and document precision jigs, fixtures, assembly aids, and inspection gauges for high-volume and precision manufacturing environments. Our approach combines GD&T-based design principles with detailed clamping force analysis, locating schemes, and ergonomic assessment to deliver fixtures that ensure part quality, protect operator safety, and integrate with your existing production infrastructure.",
+    [
+      "Fixture concept design and clamp layout", "Locating and clamping force analysis",
+      "GD&T datum scheme application", "Fixture detailed design (3D CAD and 2D drawings)",
+      "Assembly fixture and sub-assembly aid design", "Gauge and checking fixture design",
+      "Fixture qualification and runoff documentation", "Ergonomic assessment and operator safety review",
+      "Material and surface treatment specification", "Fixture maintenance and spares strategy"
+    ],
+    "Fixture design packages (3D models, 2D drawings, BOM), clamping analysis reports, qualification test procedures, and maintenance guides.",
+    "United States · EMEA · Australia",
+    TEAL_DARK, TEAL_LIGHT
+  ),
+
+  ...servicePage(
+    "Special Purpose Machines (SPM)",
+    "Custom machine design, build coordination, and commissioning",
+    "special purpose machine design, custom automation machine, SPM engineering, bespoke machine builder consultants",
+    "We engineer complete Special Purpose Machines from concept through to production sign-off — developing the mechanical, pneumatic, hydraulic, and control system architecture for bespoke assembly, test, and processing equipment. Our SPM team coordinates with build partners, manages FAT and SAT programmes, and delivers full operator and maintenance documentation, ensuring your new machine is production-ready from day one.",
+    [
+      "Machine concept and architecture development", "Mechanical design — frame, actuation, and guarding",
+      "Pneumatic and hydraulic circuit design", "Control system specification (PLC/HMI)",
+      "Build pack and fabrication drawing release", "Factory Acceptance Test (FAT) procedure and execution",
+      "Site Acceptance Test (SAT) support", "CE / machinery directive compliance",
+      "Risk assessment and safety file (EN ISO 13849)", "Operator and maintenance training packs"
+    ],
+    "Machine design package, risk assessment, CE technical file, FAT/SAT reports, electrical and pneumatic schematics, and O&M manuals.",
+    "United States · EMEA · Australia",
+    TEAL_DARK, TEAL_LIGHT
+  ),
+
+  ...servicePage(
+    "Assembly Automation Systems",
+    "Semi and fully automated assembly solutions from concept to MES integration",
+    "assembly automation design, automated assembly system, MES integration, pick and place automation engineering",
+    "We design and integrate automated assembly systems — from benchtop semi-automation to fully integrated multi-station lines with conveyor systems, robotic handling, vision inspection, torque management, and MES connectivity. Our systems are built for traceability, quality control, and operator safety, with a modular architecture that supports future line reconfigurations and capacity scaling.",
+    [
+      "Automation concept and line architecture design", "Conveyor and transfer system selection and design",
+      "Pick-and-place and robotic integration", "Torque tool and fastening system integration",
+      "Vision system selection and integration design", "MES and SCADA connectivity for traceability",
+      "Poka-yoke and error-proofing (pokayoke) design", "Electrical and pneumatic system design",
+      "PLC and HMI programming specification", "Cycle time analysis and line balancing"
+    ],
+    "System design specification, electrical/pneumatic schematics, FAT/SAT procedures, traceability architecture, and operations manual.",
+    "United States · EMEA · Australia",
+    TEAL_DARK, TEAL_LIGHT
+  ),
+
+  ...servicePage(
+    "Production Engineering",
+    "Process planning, launch readiness, and quality engineering for production",
+    "production engineering services, process planning manufacturing, PFMEA control plan, FAI first article inspection",
+    "Our Production Engineering team translates product designs into robust, repeatable manufacturing processes — developing the process plans, work instructions, control plans, and quality documentation that underpin a successful production launch. We lead PFMEA workshops, define process capability requirements, and support first-article inspection to ensure your production system consistently meets customer and regulatory requirements.",
+    [
+      "Manufacturing process planning and sequencing", "Work instruction and visual standard development",
+      "PFMEA facilitation and documentation", "Control plan development",
+      "Process capability study (Cpk) planning and analysis", "First Article Inspection (FAI / PPAP) support",
+      "Measurement System Analysis (MSA / Gauge R&R)", "Production trial and pre-series support",
+      "Non-conformance root cause analysis", "AS9100 / IATF 16949 compliance support"
+    ],
+    "Process plans, work instructions, PFMEA, control plans, PPAP documentation packages, MSA reports, and production trial reports.",
+    "United States · EMEA · Australia",
+    TEAL_DARK, TEAL_LIGHT
+  ),
+
+  ...servicePage(
+    "Industrial Engineering & Lean Manufacturing",
+    "Time study, line balancing, plant layout, and lean transformation",
+    "industrial engineering services, lean manufacturing consulting, time motion study, line balancing, plant layout optimisation",
+    "Our Industrial Engineering team improves the productivity and efficiency of manufacturing and logistics operations through rigorous analysis and structured lean methodologies. From time and motion studies and ergonomics assessments to value stream mapping and Kaizen-driven improvement programmes, we partner with operations teams to build a culture of continuous improvement and measurable output gains.",
+    [
+      "Time and motion studies (MTM, MOST, direct observation)", "Line balancing and takt time analysis",
+      "Value Stream Mapping (VSM) — current and future state", "Plant layout design using digital factory tools",
+      "OEE measurement and improvement", "5S implementation and sustainability programmes",
+      "Ergonomics assessment and workstation redesign", "Kaizen event facilitation",
+      "Throughput and capacity planning analysis", "Lean culture and CI competency development"
+    ],
+    "Time study reports, VSM documentation, line balance charts, plant layout drawings, OEE dashboards, 5S audit templates, and improvement roadmaps.",
+    "United States · EMEA · Australia",
+    TEAL_DARK, TEAL_LIGHT
+  ),
+
+  // ─── DIVISION 03 ───
+  new Paragraph({ children: [new PageBreak()] }),
+  ...sectionIntro(3, "Digital & Industry 4.0", PURPLE_DARK,
+    "Our Digital & Industry 4.0 division helps manufacturers harness connected technologies to improve quality, efficiency, and asset performance. From digital twin development and AI-powered inspection to robotics integration and industrial data platforms, we design and deploy smart factory solutions that deliver measurable, sustainable operational advantage.",
+    "digital twin development, industrial automation PLC SCADA, predictive maintenance AI, robotics factory automation, Industry 4.0 manufacturing, IIoT implementation"
+  ),
+
+  ...servicePage(
+    "Digital Twin Development",
+    "Physics-based and data-driven digital twins for machines and production systems",
+    "digital twin development services, virtual commissioning, industrial digital twin, simulation manufacturing",
+    "We build digital twins across the spectrum — from high-fidelity physics models for virtual commissioning to data-driven operational twins that monitor, predict, and optimise real-world asset performance. Our digital twins integrate with PLM, MES, and IoT platforms to create a live, synchronised replica of your production environment, enabling faster change deployment, reduced commissioning risk, and proactive maintenance decision-making.",
+    [
+      "Digital twin strategy and architecture design", "Physics-based machine and process simulation models",
+      "Data-driven operational twin development", "IoT sensor integration and data pipeline design",
+      "Virtual commissioning of automation and control systems", "What-if scenario simulation and change validation",
+      "Process Simulate / DELMIA / NX MCD implementation", "PLM and MES integration",
+      "Real-time monitoring dashboard development", "Twin maintenance, calibration, and update management"
+    ],
+    "Digital twin architecture specification, simulation models, IoT integration designs, virtual commissioning validation reports, and operational dashboards.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  ...servicePage(
+    "Industrial Automation (PLC / SCADA / HMI)",
+    "Control system design, programming, and integration for new and retrofit projects",
+    "PLC programming services, SCADA HMI development, industrial automation engineering, Siemens Allen-Bradley Beckhoff",
+    "We design, programme, and integrate industrial control systems for new-build and retrofit automation projects across manufacturing, utilities, and process industries. Our control engineers work across Siemens, Allen-Bradley, Beckhoff, and Schneider platforms, delivering fully documented, standards-compliant solutions that integrate safely with safety systems, site SCADA, and plant historians.",
+    [
+      "Control system architecture and panel design", "PLC programming (Siemens TIA Portal, Studio 5000, TwinCAT)",
+      "SCADA / DCS development (Ignition, WonderWare, FactoryTalk)", "HMI design and development",
+      "Safety system design and programming (IEC 61508 / SIL)", "Field instrument loop verification",
+      "Factory acceptance testing (FAT) execution", "Site commissioning and startup support",
+      "Cybersecurity review and OT network design", "Control system documentation and as-built packages"
+    ],
+    "Control system design specifications, PLC/SCADA source code with comments, electrical schematics, FAT/SAT records, O&M manuals, and cybersecurity assessment reports.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  ...servicePage(
+    "Robotics & Factory Automation",
+    "Robot cell design, offline programming, and systems integration",
+    "robotics integration services, factory automation engineering, robot cell design, ABB KUKA Fanuc offline programming",
+    "We design, programme, and integrate robotic cells for welding, assembly, material handling, painting, and inspection applications. Our robotics engineers use offline programming (OLP) tools to develop and validate robot programmes before installation — reducing commissioning time and line downtime. We integrate robots with vision systems, force-torque sensing, conveyors, and safety systems to deliver production-ready, CE/CSA-compliant automation cells.",
+    [
+      "Robot cell concept and layout design", "Robot selection and EOAT (end-of-arm tooling) specification",
+      "Offline programming — ABB RobotStudio, KUKA Sim, Roboguide", "Reach, cycle time, and collision analysis",
+      "Vision and force-sensing integration design", "Safety system design (ISO 10218, ISO/TS 15066)",
+      "Collaborative robot (cobot) application engineering", "Integration with conveyor, part presentation, and MES",
+      "FAT programme development and execution", "Operator training and maintenance documentation"
+    ],
+    "Cell layout drawings, OLP programmes, simulation reports, safety risk assessment, FAT documentation, and integration specifications.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  ...servicePage(
+    "Data & AI Systems",
+    "Industrial data architecture, IIoT platforms, and AI model deployment",
+    "industrial AI systems, IIoT data platform, manufacturing data analytics, AI machine learning factory",
+    "We design and implement the data infrastructure and AI systems that power intelligent manufacturing operations — from OT/IT convergence architecture and real-time data pipelines to machine learning models deployed on the shop floor. Our team bridges the gap between operational technology and enterprise IT, delivering actionable intelligence at every level of the manufacturing hierarchy.",
+    [
+      "Industry 4.0 maturity assessment and data strategy", "OT/IT network architecture and ISA-95 model design",
+      "IIoT platform selection and implementation (Azure IoT, AWS IoT, Ignition)", "Real-time data pipeline design and integration",
+      "Manufacturing KPI dashboard development", "Anomaly detection and process monitoring models",
+      "Root-cause analysis and correlation modelling", "AI model training, validation, and deployment",
+      "Edge computing architecture for low-latency applications", "Data governance and cybersecurity frameworks"
+    ],
+    "Data architecture specification, IIoT platform configuration, ML model documentation, KPI dashboards, and data governance frameworks.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  ...servicePage(
+    "Predictive Maintenance",
+    "Condition monitoring, failure prediction, and asset life extension",
+    "predictive maintenance services, condition based monitoring, vibration analysis, ML failure prediction, asset management",
+    "Our Predictive Maintenance team designs and deploys condition monitoring programmes that shift maintenance from scheduled to intelligence-driven — reducing unplanned downtime, extending asset life, and cutting maintenance cost. We integrate sensor networks, process data, and machine learning models to detect anomalies early, predict failure modes, and trigger maintenance actions before breakdowns occur.",
+    [
+      "Asset criticality ranking and CBM scope definition", "Vibration analysis sensor selection and installation design",
+      "Thermographic and oil analysis programme design", "IoT sensor network and data historian integration",
+      "Feature engineering and failure mode modelling", "ML-based remaining useful life (RUL) prediction",
+      "Alarm management and maintenance trigger design", "CMMS integration for work order automation",
+      "Predictive maintenance dashboard development", "Programme performance review and optimisation"
+    ],
+    "CBM programme specification, sensor integration design, ML model documentation, predictive maintenance dashboards, and ROI measurement reports.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  ...servicePage(
+    "Industrial AI & Computer Vision",
+    "AI-powered visual inspection and quality control at line speed",
+    "industrial computer vision, AI visual inspection, defect detection AI, machine vision quality control manufacturing",
+    "We design and deploy industrial computer vision systems that perform 100% automated visual inspection — detecting surface defects, dimensional deviations, assembly errors, and traceability codes at line speed. Our deep learning models are trained on your specific parts and failure modes, and deployed on edge hardware for zero-latency quality decisions without dependency on cloud connectivity.",
+    [
+      "Inspection requirement analysis and camera system design", "Lighting, optics, and imaging system specification",
+      "Deep learning model development (defect classification, detection, segmentation)", "Training data acquisition and labelling programme",
+      "Model validation and false accept / false reject analysis", "Edge AI hardware selection and deployment",
+      "Integration with PLC, MES, and traceability systems", "OCR and data matrix reading implementation",
+      "Model performance monitoring and drift detection", "Continuous learning and model update management"
+    ],
+    "Vision system specification, trained AI models with validation reports, integration specifications, and performance monitoring dashboards.",
+    "United States · EMEA · Australia",
+    PURPLE_DARK, PURPLE_LIGHT
+  ),
+
+  // ─── DIVISION 04 ───
+  new Paragraph({ children: [new PageBreak()] }),
+  ...sectionIntro(4, "Consulting & Transformation", AMBER_DARK,
+    "Strategic advisory at the intersection of engineering, operations, and digital transformation. Our consulting team partners with C-suite and operational leaders to define technology roadmaps, unlock operational value, and lead complex transformation programmes across multi-site manufacturing and industrial enterprises globally.",
+    "engineering consulting services, plant modernisation strategy, digital transformation manufacturing, operational excellence consulting, Industry 4.0 strategy"
+  ),
+
+  ...servicePage(
+    "Engineering Consulting",
+    "Independent technical advisory, expert reviews, and standards development",
+    "independent engineering consultants, technical due diligence, engineering expert review, industrial engineering advisory",
+    "Our Engineering Consulting practice provides independent technical expertise for capital projects, technology selection decisions, regulatory submissions, and dispute resolution. We act as trusted advisors to boards, project sponsors, and operations leaders — delivering clear, evidence-based guidance that navigates complex technical and commercial challenges in regulated and high-hazard industries.",
+    [
+      "Technical due diligence for acquisitions and investments", "Independent project and design reviews",
+      "Technology selection and vendor assessment", "Engineering standards and procedure development",
+      "Regulatory submission support and expert witness preparation", "Capital project governance and assurance",
+      "Risk and uncertainty analysis for major projects", "Cross-functional engineering competency assessment",
+      "Lessons learned and best practice capture", "Technical roadmap development for senior leadership"
+    ],
+    "Technical review reports, due diligence assessments, standards documentation, risk registers, and executive-level briefing papers.",
+    "United States · EMEA · Australia",
+    AMBER_DARK, AMBER_LIGHT
+  ),
+
+  ...servicePage(
+    "Plant Modernisation Strategy",
+    "Asset assessment, modernisation roadmaps, and phased transformation planning",
+    "plant modernisation strategy, factory upgrade roadmap, production asset strategy, brownfield modernisation manufacturing",
+    "We provide comprehensive assessments of ageing production facilities — evaluating equipment condition, technology gaps, safety risk exposure, and competitive capability shortfalls. From that foundation we build prioritised, business-case-driven modernisation roadmaps that balance capital investment against operational continuity, delivering phased transformation plans that can be implemented without disrupting current production commitments.",
+    [
+      "Asset condition and technology maturity assessment", "Production capability gap analysis vs market requirements",
+      "Safety and compliance risk quantification", "Modernisation option identification and evaluation",
+      "Business case development with NPV and payback analysis", "Phased roadmap design (3–10 year horizon)",
+      "Capital expenditure profiling and funding strategy", "Risk mitigation and contingency planning",
+      "Change management and stakeholder engagement strategy", "Programme governance and benefits realisation framework"
+    ],
+    "Asset assessment reports, modernisation options analysis, business cases, phased roadmaps, capital expenditure plans, and governance frameworks.",
+    "United States · EMEA · Australia",
+    AMBER_DARK, AMBER_LIGHT
+  ),
+
+  ...servicePage(
+    "Digital Transformation",
+    "End-to-end Industry 4.0 transformation from strategy to deployment",
+    "digital transformation manufacturing, Industry 4.0 strategy consulting, smart factory implementation, manufacturing technology roadmap",
+    "We lead end-to-end digital transformation programmes for manufacturing organisations — from initial maturity assessment and technology architecture design through solution deployment, change management, and capability building. Our pragmatic approach avoids technology-for-its-own-sake, focusing on use cases that deliver measurable operational value and building the internal capability to sustain and scale digital improvements beyond the initial programme.",
+    [
+      "Industry 4.0 maturity assessment (SIRI, EFFRA, or bespoke)", "Digital use-case identification and prioritisation",
+      "Technology architecture and platform selection", "Smart factory pilot design and deployment",
+      "Digital thread and data strategy development", "Organisational readiness and change management",
+      "Digital skills and capability development programme", "Programme governance and KPI framework",
+      "Vendor selection and ecosystem management", "Benefits realisation tracking and programme review"
+    ],
+    "Maturity assessment reports, digital strategy documents, technology architecture, use-case business cases, transformation programme plans, and capability development roadmaps.",
+    "United States · EMEA · Australia",
+    AMBER_DARK, AMBER_LIGHT
+  ),
+
+  ...servicePage(
+    "Optimization & Value Engineering",
+    "Operational excellence programmes with measurable EBITDA impact",
+    "operational excellence consulting, manufacturing optimisation, Six Sigma lean consulting, EBITDA improvement manufacturing",
+    "Our Optimisation and Value Engineering practice combines lean, Six Sigma, and digital analytical tools to identify and eliminate value leakage across the end-to-end manufacturing value chain. We focus on measurable outcomes — cost reduction, yield improvement, lead time compression, and inventory optimisation — delivering sustainable performance gains that are embedded in the organisation's culture and management systems.",
+    [
+      "End-to-end value chain mapping and loss analysis", "OEE and yield improvement programmes",
+      "Six Sigma project facilitation (DMAIC/DFSS)", "Supply chain and inventory optimisation",
+      "Energy and utilities cost reduction", "Quality cost (CoQ/CoPQ) reduction programmes",
+      "Maintenance cost optimisation", "Lead time and flow improvement",
+      "Operational KPI framework design", "Performance review cadence and management system design"
+    ],
+    "Value chain analysis reports, improvement project charters, DMAIC documentation, KPI dashboards, and benefits tracking reports.",
+    "United States · EMEA · Australia",
+    AMBER_DARK, AMBER_LIGHT
+  ),
+
+  // ─── CLOSING ───
+  new Paragraph({ children: [new PageBreak()] }),
+  new Paragraph({
+    children: [new TextRun({ text: "Contact & Engagement", font: "Arial", size: 36, bold: true, color: BLUE_DARK })],
+    spacing: { before: 360, after: 240 }
+  }),
+  new Paragraph({
+    children: [new TextRun({ text: "To discuss your specific engineering challenge, request a capability presentation, or initiate a scoping conversation, please reach out to your regional EMEA Global point of contact.", font: "Arial", size: 22, color: TEXT_MID })],
+    spacing: { before: 0, after: 320 },
+    alignment: AlignmentType.JUSTIFIED
+  }),
+  new Table({
+    width: { size: 9000, type: WidthType.DXA },
+    columnWidths: [2200, 2200, 2200, 2400],
+    rows: [
+      new TableRow({
+        children: [
+          { label: "United States", detail: "Americas Regional Office" },
+          { label: "Europe & Middle East", detail: "EMEA Regional Office" },
+          { label: "United Kingdom", detail: "UK Engineering Centre" },
+          { label: "Australia & APAC", detail: "APAC Regional Office" },
+        ].map(({ label, detail }) => new TableCell({
+          borders,
+          width: { size: 2250, type: WidthType.DXA },
+          shading: { fill: BLUE_LIGHT, type: ShadingType.CLEAR },
+          margins: { top: 120, bottom: 120, left: 160, right: 160 },
+          children: [
+            new Paragraph({ children: [new TextRun({ text: label, font: "Arial", size: 22, bold: true, color: BLUE_DARK })] }),
+            new Paragraph({ children: [new TextRun({ text: detail, font: "Arial", size: 18, color: TEXT_MID })] }),
+            new Paragraph({ children: [new TextRun({ text: "enquiries@emeaglobal.com", font: "Arial", size: 18, color: BLUE_MID })] }),
+          ]
+        }))
+      })
+    ]
+  }),
+  spacer(360),
+  new Paragraph({
+    children: [new TextRun({ text: "© EMEA Global Engineering Services — All rights reserved. This document is confidential and intended for recipient use only.", font: "Arial", size: 16, color: GRAY_MED, italics: true })],
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 240 }
+  }),
+];
+
+const doc = new Document({
+  numbering: {
+    config: [
+      {
+        reference: "bullets",
+        levels: [{
+          level: 0, format: LevelFormat.BULLET, text: "\u2022",
+          alignment: AlignmentType.LEFT,
+          style: { paragraph: { indent: { left: 440, hanging: 280 } } }
+        }]
+      }
+    ]
+  },
+  styles: {
+    default: { document: { run: { font: "Arial", size: 22 } } },
+    paragraphStyles: [
+      {
+        id: "Heading1", name: "Heading 1", basedOn: "Normal", next: "Normal", quickFormat: true,
+        run: { size: 40, bold: true, font: "Arial", color: BLUE_DARK },
+        paragraph: { spacing: { before: 360, after: 200 }, outlineLevel: 0 }
+      },
+      {
+        id: "Heading2", name: "Heading 2", basedOn: "Normal", next: "Normal", quickFormat: true,
+        run: { size: 28, bold: true, font: "Arial", color: BLUE_MID },
+        paragraph: { spacing: { before: 240, after: 140 }, outlineLevel: 1 }
+      }
+    ]
+  },
+  sections: [{
+    properties: {
+      page: {
+        size: { width: 12240, height: 15840 },
+        margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 }
+      }
+    },
+    footers: {
+      default: new Footer({
+        children: [new Paragraph({
+          children: [
+            new TextRun({ text: "EMEA Global Engineering Services  |  Confidential  |  Page ", font: "Arial", size: 18, color: GRAY_MED }),
+            new TextRun({ children: [PageNumber.CURRENT], font: "Arial", size: 18, color: GRAY_MED }),
+          ],
+          alignment: AlignmentType.CENTER
+        })]
+      })
+    },
+    children
+  }]
+});
+
+Packer.toBuffer(doc).then(buf => {
+  fs.writeFileSync("/home/claude/EMEA_Global_Services_Capability_Document.docx", buf);
+  console.log("Done");
+});
