@@ -69,8 +69,8 @@ export default function ServicesPage() {
       <section className="section section--dark" style={{ textAlign: 'center', padding: '5rem 0' }}>
         <div className="container">
           <ScrollReveal className="reveal">
-            <h2 className="section-title" style={{ color: 'white' }}>Need a Custom Solution?</h2>
-            <p className="section-subtitle mx-auto" style={{ color: 'var(--text-on-dark)', marginBottom: '2rem' }}>
+            <h2 className="section-title" style={{ color: 'black' }}>Need a Custom Solution?</h2>
+            <p className="section-subtitle mx-auto" style={{ color: 'black', marginBottom: '2rem' }}>
               Let&apos;s discuss your specific engineering challenge and design a tailored approach.
             </p>
             <Link href="/contact" className="btn btn--primary btn--lg">

@@ -145,8 +145,8 @@ export default function AboutPage() {
       <section className="section section--dark" style={{ textAlign: 'center', padding: '5rem 0' }}>
         <div className="container">
           <ScrollReveal className="reveal">
-            <h2 className="section-title" style={{ color: 'white', marginBottom: '1rem' }}>Ready to Work Together?</h2>
-            <p className="section-subtitle mx-auto" style={{ color: 'var(--text-on-dark)', marginBottom: '2rem' }}>
+            <h2 className="section-title" style={{ color: 'black', marginBottom: '1rem' }}>Ready to Work Together?</h2>
+            <p className="section-subtitle mx-auto" style={{ color: 'black', marginBottom: '2rem' }}>
               Let&apos;s discuss how EMEA Global can support your engineering and industrial challenges.
             </p>
             <Link href="/contact" className="btn btn--primary btn--lg">
