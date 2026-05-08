@@ -197,7 +197,7 @@ export default function HomePage() {
                         {[0, 1, 2, 3, 4, 5, 6].map((num) => (
                           <Image
                             key={`${i}-${num}`}
-                            src={`/images/clients/client_${num}.png`}
+                            src={`/emeags/images/clients/client_${num}.png`}
                             alt={`Client ${num}`}
                             className={styles['client-marquee__logo']}
                             width={160}
@@ -214,7 +214,7 @@ export default function HomePage() {
             <ScrollReveal className="reveal" delay={100} style={{ gridColumn: '1 / -1' }}>
               <div className={`${styles.features__card} ${styles['features__card--wide']}`}>
                 <div className={styles['features__card-image']}>
-                  <Image src="/images/award.jpg" alt="Karnataka State Urban Mobility Grand Challenge Winner" fill style={{ objectFit: 'contain', background: '#fff' }} sizes="(max-width: 768px) 100vw, 50vw" />
+                  <Image src="/emeags/images/award.jpg" alt="Karnataka State Urban Mobility Grand Challenge Winner" fill style={{ objectFit: 'contain', background: '#fff' }} sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
                 <div className={styles['features__card-content']}>
                   <div className={styles['features__card-icon-badge']}>
@@ -378,7 +378,7 @@ export default function HomePage() {
               </div>
               <div className={styles.projects__content}>
                 <div className={styles.projects__image}>
-                  <Image src="/images/factory.png" alt="Project showcase" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
+                  <Image src="/emeags/images/factory.png" alt="Project showcase" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
                 <div className={styles.projects__info}>
                   <div className={styles.projects__number}>{activeProjectData.num}</div>
