@@ -60,30 +60,34 @@
 }
 
 .footer {
-  padding: 1rem 2rem;
-  background: var(--bg-card-hover);
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-card);
   border-top: 1px solid var(--border-glass-outer);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
 }
 
 .acceptBtn {
   width: 100%;
-  padding: 1rem;
-  font-size: var(--text-body);
-  font-weight: 600;
-  color: var(--text-light);
-  background: var(--brand-accent);
-  border-radius: var(--radius-full);
+  padding: 1.15rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: white;
+  background: black;
+  border-radius: var(--radius-lg);
   border: none;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-smooth);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .acceptBtn:hover {
-  background: var(--brand-accent-light);
+  background: #222;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes slideUp {

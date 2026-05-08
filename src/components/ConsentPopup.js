@@ -27,11 +27,21 @@ export default function ConsentPopup() {
   }, []);
 
   const handleAccept = () => {
-    const today = new Date().toDateString();
-    localStorage.setItem('emea_consent_date', today);
-    setShowPopup(false);
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
+    try {
+      const today = new Date().toDateString();
+      localStorage.setItem('emea_consent_date', today);
+      setShowPopup(false);
+      // Ensure all overflow blocks are cleared
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
+      window.scrollTo(0, 0); // Reset scroll to top just in case
+    } catch (e) {
+      console.error('Consent storage failed:', e);
+      setShowPopup(false);
+      document.body.style.overflow = '';
+    }
   };
 
   // Prevent rendering until mounted to avoid hydration mismatch

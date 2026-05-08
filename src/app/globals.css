@@ -120,6 +120,7 @@ button {
 
 /* ── Container ── */
 .container {
+  width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-padding);
@@ -127,8 +128,11 @@ button {
 
 /* ── Section ── */
 .section {
+  width: 100%;
+  max-width: 100%;
   padding: var(--section-padding) 0;
   position: relative;
+  overflow: hidden;
 }
 
 /* ══════════════════════════════════
@@ -326,7 +330,7 @@ button {
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .section {
-    padding: clamp(2.5rem, 6vw, 4rem) 0;
+    padding: clamp(1.5rem, 5vw, 3rem) 0;
   }
 }
 
