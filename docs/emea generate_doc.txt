@@ -236,7 +236,7 @@ const children = [
 
   // ─── DIVISION 01 ───
   ...sectionIntro(1, "Engineering & Design", BLUE_MID,
-    "From concept validation to production-ready designs, our Engineering & Design division supports the full product lifecycle. We partner with clients in aerospace, automotive, energy, and industrial sectors — delivering precise, standards-compliant engineering that reduces time-to-market and de-risks production launch.",
+    "From concept validation to production-ready designs, our Engineering & Design division supports the full product lifecycle. We partner with clients in aerospace,  energy, and industrial sectors — delivering precise, standards-compliant engineering that reduces time-to-market and de-risks production launch.",
     "product engineering services, CAD PLM solutions, FEA CFD simulation, process engineering consultants, FEED P&ID engineering, NPD services US EMEA Australia"
   ),
 
@@ -396,7 +396,7 @@ const children = [
   // ─── DIVISION 02 ───
   new Paragraph({ children: [new PageBreak()] }),
   ...sectionIntro(2, "Manufacturing & Industrialization", TEAL_DARK,
-    "We help manufacturers bridge the gap between design and production. Our Manufacturing & Industrialization team specialises in tooling design, SPM development, production engineering, and lean transformation — enabling clients across automotive, aerospace, FMCG, and heavy industry to achieve scalable, cost-efficient, and quality-assured production operations.",
+    "We help manufacturers bridge the gap between design and production. Our Manufacturing & Industrialization team specialises in tooling design, SPM development, production engineering, and lean transformation — enabling clients across  aerospace, FMCG, and heavy industry to achieve scalable, cost-efficient, and quality-assured production operations.",
     "tooling fixture engineering, special purpose machine design, lean manufacturing consulting, production engineering services, assembly automation, industrial engineering"
   ),
 
@@ -461,7 +461,7 @@ const children = [
       "PFMEA facilitation and documentation", "Control plan development",
       "Process capability study (Cpk) planning and analysis", "First Article Inspection (FAI / PPAP) support",
       "Measurement System Analysis (MSA / Gauge R&R)", "Production trial and pre-series support",
-      "Non-conformance root cause analysis", "AS9100 / IATF 16949 compliance support"
+      "Non-conformance root cause analysis", "ISO / IEC 27001, ISO 9001 compliance support"
     ],
     "Process plans, work instructions, PFMEA, control plans, PPAP documentation packages, MSA reports, and production trial reports.",
     "United States · EMEA · Australia",

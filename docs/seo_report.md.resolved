@@ -1,0 +1,65 @@
+# SEO & Performance Audit Report: EMEA Global Services
+
+This report outlines the current status of the EMEA Global Services website against the requested focus areas. It provides a technical analysis of your Next.js application and actionable recommendations.
+
+## 1. Metadata
+**Current Status**: **Good, but could be enhanced.**
+- You are utilizing Next.js 15+ App Router metadata APIs properly in `src/app/layout.js`.
+- A generic Open Graph (OG) tag configuration is in place.
+- Dynamic metadata generation (`generateMetadata`) is correctly implemented for the service pages (`/services/[divisionId]/[serviceSlug]/page.js`), which injects unique titles, descriptions, and SEO keywords based on your rich `services.js` data file.
+
+**Recommendations**:
+- Add **Twitter Card** metadata (e.g., `twitter:card: "summary_large_image"`).
+- Implement dynamic Open Graph images (`og:image`) for individual service pages so that sharing a specific service (like "Product Design") displays a relevant thumbnail.
+
+## 2. Schema (Structured Data)
+**Current Status**: **Missing.**
+- A search of the codebase indicates there is no `application/ld+json` structured data injected into any pages.
+
+**Recommendations**:
+- **Organization Schema**: Add this to the homepage to help Google understand your company name, logo, contact info, and Indiranagar HQ address.
+- **LocalBusiness / B2B Schema**: Useful for capturing local and enterprise search intent.
+- **Service Schema**: Add structured data to the dynamic service pages outlining the specific engineering and manufacturing services you offer.
+
+## 3. Content Quality
+**Current Status**: **Excellent.**
+- The text content is highly specific, professional, and targeted toward enterprise B2B clients (OEMs, EPC companies).
+- `services.js` contains deep, keyword-rich copy including specific locations (*Bengaluru, Chennai, Pune, EMEA*), specific software (*CATIA, SolidWorks*), and specific methodologies (*PFMEA, Digital Twin, Kaizen*). 
+- The tone is authoritative and matches the industrial-modern aesthetic.
+
+**Recommendations**:
+- Ensure the `<h2>` and `<h3>` tags follow strict hierarchy. The content is great, but maintaining semantic HTML structure will help crawlers parse it better.
+
+## 4. Page Speed
+**Current Status**: **Requires Attention.**
+- **Image Optimization**: The codebase currently relies on standard HTML `<img>` tags (e.g., in `Navbar.js` and `page.js`) instead of the Next.js `<Image>` component (`next/image`).
+- Because of this, large images (like the Nidec logo, the new transparent logo, or the Award card) are not being automatically compressed into WebP/AVIF formats, resized for mobile devices, or lazy-loaded.
+
+**Recommendations**:
+- Refactor `<img>` tags to `import Image from 'next/image'` to instantly boost Core Web Vitals (LCP - Largest Contentful Paint).
+- Ensure the scrolling marquee animations are strictly using CSS transforms (`transform: translateX()`) rather than margin/left positioning to prevent browser paint-thrashing.
+
+## 5. Backlinks
+**Current Status**: **N/A (Pre-launch / Local Development)**
+- Backlinks are inbound links from external domains. Since the site is currently being built locally, an off-page SEO strategy hasn't been executed yet.
+
+**Recommendations**:
+- Post-deployment, focus on acquiring backlinks from industrial directories, engineering forums, local Bengaluru business registries, and manufacturing partners (like the clients listed in your marquee).
+
+## 6. Internal Linking
+**Current Status**: **Fair.**
+- The top Navbar and Footer provide consistent global navigation to core pages.
+- Job postings link directly to the contact mechanism.
+
+**Recommendations**:
+- **Contextual Linking**: Add inline links within the service descriptions. For example, if the "Manufacturing" page mentions "Digital Twins", it should link directly to the "Digital & Industry 4.0" service page. This creates a "web" of context for Google crawlers.
+- Add Breadcrumbs (e.g., `Home > Services > Engineering > Product Design`) on the dynamic detail pages to improve both UX and crawler navigation.
+
+## 7. Technical SEO
+**Current Status**: **Action Required.**
+- **Missing Core Files**: There is no `robots.txt` or `sitemap.xml` file configured in the Next.js `app` or `public` directories.
+- **Canonical URLs**: Canonical tags are not explicitly defined, which could lead to duplicate content issues if the site is accessible via both `www` and non-`www` domains.
+
+**Recommendations**:
+- Create a dynamic `sitemap.js` and `robots.js` file in the root `app` directory. Next.js App router can automatically generate these based on your `services.js` array, ensuring every single sub-service is submitted to Google.
+- Define a `metadataBase` in `layout.js` (e.g., `metadataBase: new URL('https://emeaglobalsolutions.com')`) so Next.js can resolve absolute URLs for canonical links and Open Graph images.

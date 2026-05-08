@@ -1,0 +1,42 @@
+# Phase 2: Advanced SEO Strategy & Pending Optimizations
+
+To achieve dominant search engine visibility across all targeted Indian cities (Bengaluru, Chennai, Pune, etc.) and global platforms (US, EMEA, Australia), we must move beyond baseline technical SEO. 
+
+Drawing from 15 years of enterprise B2B SEO experience, here is my end-to-end evaluation of what separates a "good" site from an **industry-leading** site, and exactly what is still pending.
+
+---
+
+## 1. Local & Global Dominance (Programmatic SEO & i18n)
+Currently, your location targeting is limited to keyword stuffing in the `services.js` file (e.g., mentioning "Pune" in the metadata). Google's algorithm strongly prefers dedicated, highly relevant pages for local queries.
+
+*   **Pending: Programmatic City Pages**: We need to dynamically generate location-specific landing pages. For example: `/services/engineering/product-design/pune` vs `/services/engineering/product-design/bengaluru`. This allows us to inject local schema, local case studies, and exact-match H1 tags.
+*   **Pending: Internationalization (Hreflang)**: To rank natively in the US, EMEA, and Australia without triggering duplicate content penalties, we need Next.js i18n routing (`/en-us/`, `/en-in/`) and `<link rel="alternate" hreflang="x" />` tags in the document head.
+
+## 2. Core Web Vitals (Advanced Performance)
+While we fixed the Largest Contentful Paint (LCP) by adding `next/image`, we are currently failing on **Cumulative Layout Shift (CLS)** and **First Contentful Paint (FCP)** due to font loading.
+
+*   **Pending: Next.js Font Optimization**: In `globals.css`, you are using `@import url('https://fonts.googleapis.com...')` to load the Inter font. This causes a render-blocking request and FOIT (Flash of Invisible Text). We must refactor the app to use `next/font/google`. This self-hosts the font at build time, resulting in zero layout shift and instant text rendering.
+
+## 3. Advanced Schema Markup (JSON-LD)
+We added Organization and Service schema, but we are leaving highly-visible "Rich Snippets" on the table.
+
+*   **Pending: FAQPage Schema**: You have beautifully designed FAQ sections on the Homepage and Contact page. By wrapping these in `FAQPage` JSON-LD schema, Google will often display your Q&As directly on the search results page, pushing competitors down and increasing your click-through rate (CTR).
+*   **Pending: BreadcrumbList Schema**: Injecting breadcrumb schema tells Google exactly how your site architecture works, allowing them to display clean navigation paths in the search results instead of messy URLs.
+
+## 4. Dynamic Open Graph Generation (Social SEO)
+Currently, if someone shares 10 different service pages on LinkedIn, they will all look exactly the same because we rely on a static fallback image.
+
+*   **Pending: `@vercel/og` Image Generation**: We need to implement dynamic edge-rendered Open Graph images. When a URL is shared, Next.js should programmatically generate a beautiful branded image card that includes the specific Service Title (e.g., "Industrial Automation Services") and the EMEA logo. This drastically increases social CTR.
+
+## 5. Pillar-Cluster Content Architecture
+B2B engineering is a high-trust, high-ticket industry. Ranking for "Engineering Services Bengaluru" is hard. Ranking for "How CFD Simulation Reduces Thermal Stress in Oil Pipelines" is much easier and highly converting.
+
+*   **Pending: Insights / Knowledge Hub**: We need to establish a `/insights` or `/case-studies` route. This allows us to target long-tail keywords. We then internally link these specific articles back to your core "money" pages (e.g., the Product Design service page). This builds massive Topical Authority.
+
+---
+
+### Summary of the Next Execution Sprint
+If we want to build the ultimate SEO foundation, these are the immediate technical steps I would take next:
+1. Replace `@import` fonts with `next/font/google`.
+2. Implement `FAQPage` schema on the Contact page.
+3. Architect the Next.js Dynamic Routes for City-Specific landing pages.

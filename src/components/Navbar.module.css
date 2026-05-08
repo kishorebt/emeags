@@ -1,0 +1,298 @@
+/* Navbar — Orbai-exact v4 */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+  transition: all 0.4s var(--ease-smooth);
+  background: transparent;
+}
+
+.navbar.scrolled {
+  --border-bottom-width: 2px;
+  --border-color: var(--token-ec1aff2f-c0a6-4cee-9e8e-0b2f5e23dc77, rgba(255, 255, 255, 0.3));
+  --border-left-width: 0px;
+  --border-right-width: 0px;
+  --border-style: solid;
+  --border-top-width: 0px;
+  backdrop-filter: blur(5px);
+  background-color: var(--token-b39bd94a-d226-4f47-90cd-9b7ad3defa3a, rgba(245, 245, 245, 0.2));
+  width: 100%;
+  opacity: 1;
+  border-radius: 0px;
+  box-shadow: none;
+
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Logo */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.navbar__logo-image {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.navbar__logo-text {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo-text span:first-child {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transform: translateY(2px);
+}
+
+.navbar__logo-text span:last-child {
+  display: none;
+}
+
+/* Nav Links */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.navbar__link {
+  padding: 0.35rem 0.8rem;
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-fast) var(--ease-smooth);
+  letter-spacing: -0.01em;
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  color: var(--text-primary);
+}
+
+.navbar__link--dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  cursor: pointer;
+}
+
+.navbar__link--dropdown svg {
+  width: 13px;
+  height: 13px;
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}
+
+/* Dropdown */
+.navbar__dropdown-wrapper {
+  position: relative;
+}
+
+.navbar__dropdown {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  background: white;
+  border: 1px solid var(--border-glass-outer);
+  border-radius: var(--radius-md);
+  padding: 0.35rem;
+  min-width: 200px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--duration-fast) var(--ease-smooth);
+  z-index: 100;
+}
+
+.navbar__dropdown-wrapper:hover .navbar__dropdown,
+.navbar__dropdown-wrapper.open .navbar__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.navbar__dropdown-wrapper:hover .navbar__link--dropdown svg {
+  transform: rotate(180deg);
+}
+
+.navbar__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.navbar__dropdown-item:hover {
+  background: var(--bg-card-inner);
+  color: var(--text-primary);
+}
+
+.navbar__dropdown-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* CTA */
+.navbar__cta {
+  padding: 0.45rem 1.15rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: white;
+  background: var(--text-primary);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-badge);
+}
+
+.navbar__cta:hover {
+  background: var(--brand-accent-light);
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════
+   MOBILE — Match Orbai hamburger
+   ══════════════════════════════════ */
+.navbar__mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.navbar__mobile-toggle span {
+  width: 22px;
+  height: 1.5px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  transform-origin: center;
+}
+
+.navbar__mobile-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.navbar__mobile-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__mobile-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* Mobile Overlay — Orbai-style fullscreen white glass */
+.navbar__mobile-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+
+  .navbar__links,
+  .navbar__cta {
+    display: none;
+  }
+
+  .navbar__mobile-toggle {
+    display: flex;
+  }
+
+  .navbar__mobile-overlay {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    z-index: 999;
+    padding: 5rem 1.5rem 2rem;
+    gap: 0;
+    transform: translateX(100%);
+    transition: transform 0.4s var(--ease-smooth);
+    overflow-y: auto;
+  }
+
+  .navbar__mobile-overlay.open {
+    transform: translateX(0);
+  }
+
+  .navbar__mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-glass-outer);
+    letter-spacing: -0.02em;
+  }
+
+  .navbar__mobile-sub {
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s var(--ease-smooth);
+  }
+
+  .navbar__mobile-sub.open {
+    max-height: 500px;
+  }
+
+  .navbar__mobile-sub-item {
+    padding: 0.5rem 0;
+    font-size: var(--text-body);
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  }
+
+  .navbar__mobile-cta {
+    margin-top: 1.5rem;
+    padding: 0.85rem;
+    text-align: center;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: white;
+    background: var(--text-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-badge);
+  }
+}

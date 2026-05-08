@@ -1,0 +1,126 @@
+.hero {
+  padding: 10rem 0 4rem;
+  background: var(--bg-body);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.hero__subtitle {
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.jobs__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.job__card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass-outer);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .job__card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+.job__card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+}
+
+.job__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.job__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.job__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.job__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.job__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-card-inner);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.job__tag--wfo {
+  color: #0F9B7D;
+  background: rgba(15, 155, 125, 0.1);
+}
+
+.job__desc {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 700px;
+  margin-top: 0.5rem;
+}
+
+.apply__btn-desktop {
+  display: inline;
+}
+
+.apply__btn-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .apply__btn-desktop {
+    display: none;
+  }
+  .apply__btn-mobile {
+    display: inline;
+  }
+}
