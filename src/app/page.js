@@ -378,7 +378,7 @@ export default function HomePage() {
               </div>
               <div className={styles.projects__content}>
                 <div className={styles.projects__image}>
-                  <Image src="/images/factory.png" alt="Project showcase" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
+                  <Image src="/emeags/images/factory.png" alt="Project showcase" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
                 <div className={styles.projects__info}>
                   <div className={styles.projects__number}>{activeProjectData.num}</div>

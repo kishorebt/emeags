@@ -954,13 +954,13 @@
   font-size: var(--text-h2);
   font-weight: 400;
   margin-bottom: 0.5rem;
-  color: white;
+  color: black;
   letter-spacing: -0.025em;
 }
 
 .cta__subtitle {
   font-size: var(--text-body);
-  color: var(--text-on-dark);
+  color: black;
   margin-bottom: 1.75rem;
   max-width: 400px;
   margin-left: auto;
@@ -997,8 +997,8 @@
   font-size: var(--text-body);
   font-weight: 600;
   background: transparent;
-  color: white;
-  border: 1px solid rgba(255,255,255,0.18);
+  color: black;
+  border: 1px solid rgba(0,0,0,0.18);
   border-radius: var(--radius-full);
   transition: all 0.3s;
   display: inline-flex;
