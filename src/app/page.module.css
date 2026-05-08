@@ -72,6 +72,13 @@
 .hero__wave-ring:nth-child(7) { animation-delay: 12s; }
 .hero__wave-ring:nth-child(8) { animation-delay: 14s; }
 
+@media (max-width: 768px) {
+  .hero__wave-ring {
+    width: 300px;
+    height: 300px;
+  }
+}
+
 .hero__content {
   position: relative;
   z-index: 2;
@@ -411,11 +418,24 @@
 
 .client-marquee__track {
   display: flex;
-  gap: 4rem;
   align-items: center;
   width: max-content;
   animation: marqueeScroll 40s linear infinite;
   will-change: transform;
+}
+
+.client-marquee__group {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  padding-right: 4rem;
+}
+
+@media (max-width: 768px) {
+  .client-marquee__group {
+    gap: 2.5rem;
+    padding-right: 2.5rem;
+  }
 }
 
 .client-marquee__logo {

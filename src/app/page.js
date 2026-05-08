@@ -193,7 +193,7 @@ export default function HomePage() {
                 <div className={styles['client-marquee']}>
                   <div className={styles['client-marquee__track']}>
                     {[...Array(2)].map((_, i) => (
-                      <span key={i} style={{ display: 'flex', gap: '4rem', alignItems: 'center' }}>
+                      <span key={i} className={styles['client-marquee__group']}>
                         {[0, 1, 2, 3, 4, 5, 6].map((num) => (
                           <Image
                             key={`${i}-${num}`}

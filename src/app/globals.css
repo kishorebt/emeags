@@ -89,7 +89,9 @@ body {
   line-height: 1.6;
   color: var(--text-primary);
   background: var(--bg-body);
+  width: 100%;
   overflow-x: hidden;
+  position: relative;
   letter-spacing: -0.01em;
 }
 
