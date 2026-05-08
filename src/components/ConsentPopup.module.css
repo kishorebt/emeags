@@ -4,14 +4,16 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  z-index: 9999;
+  z-index: 99999;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   pointer-events: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .modal {
@@ -25,10 +27,15 @@
   flex-direction: column;
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   pointer-events: auto;
+  max-height: 95vh;
+  max-height: 95dvh;
+  overflow: hidden;
 }
 
 .content {
   padding: 1.2rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .title {

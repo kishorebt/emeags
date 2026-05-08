@@ -212,16 +212,16 @@ export default function HomePage() {
             </ScrollReveal>
             {/* Row 2: Award Card */}
             <ScrollReveal className="reveal" delay={100} style={{ gridColumn: '1 / -1' }}>
-              <div className={`${styles.features__card} ${styles['features__card--wide']}`} style={{ padding: '1rem', gap: '2.5rem', gridTemplateColumns: 'minmax(300px, 45%) 1fr' }}>
-                <div className={styles['features__card-image']} style={{ height: '280px', borderRadius: '1rem', width: '100%', border: '1px solid var(--border-color)', position: 'relative', overflow: 'hidden' }}>
+              <div className={`${styles.features__card} ${styles['features__card--wide']}`}>
+                <div className={styles['features__card-image']}>
                   <Image src="/emeags/images/award.jpg" alt="Karnataka State Urban Mobility Grand Challenge Winner" fill style={{ objectFit: 'contain', background: '#fff' }} sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
-                <div style={{ paddingRight: '2rem' }}>
-                  <div className={styles['features__card-icon']} style={{ background: 'linear-gradient(135deg, #333, #000)', width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 8px 16px rgba(0,0,0,0.15)', marginBottom: '1.25rem' }}>
-                    <Award size={24} style={{ color: '#fff' }} />
+                <div className={styles['features__card-content']}>
+                  <div className={styles['features__card-icon-badge']}>
+                    <Award size={24} />
                   </div>
-                  <h3 className={styles['features__card-title']} style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Award-Winning Innovation</h3>
-                  <p className={styles['features__card-desc']} style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
+                  <h3 className={styles['features__card-title-lg']}>Award-Winning Innovation</h3>
+                  <p className={styles['features__card-desc-lg']}>
                     Recognized as the <strong>Winner of the Karnataka State Urban Mobility Grand Challenge 2022</strong> by the Department of Electronics, IT, Bt and S&T, Government of Karnataka. This achievement reflects our commitment to pioneering advanced mobility and engineering solutions.
                   </p>
                 </div>
