@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { ArrowRight, Check, Globe, ChevronRight } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import ProjectGallery from '@/components/ProjectGallery';
 import styles from './detail.module.css';
 
 export default function ServiceDetailClient({ service, division, cityName }) {
@@ -53,6 +54,12 @@ export default function ServiceDetailClient({ service, division, cityName }) {
                   ))}
                 </div>
               </ScrollReveal>
+
+              {service.gallery && service.gallery.length > 0 && (
+                <ScrollReveal className="reveal">
+                  <ProjectGallery images={service.gallery} accentColor={division.colorHex} />
+                </ScrollReveal>
+              )}
 
               <ScrollReveal className="reveal">
                 <div className={styles.deliverables}>

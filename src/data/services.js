@@ -12,6 +12,12 @@ export const divisions = [
     services: [
       {
         slug: 'new-product-engineering',
+        gallery: [
+          '/images/projects/image2.jpg',
+          '/images/projects/image1.png',
+          '/images/projects/image4.png',
+          '/images/projects/image3.jpg',
+        ],
         title: 'New Product Engineering Services',
         tagline: 'End-to-End Product Design & Development for Global Industrial Markets',
         seoKeywords:
@@ -35,6 +41,9 @@ export const divisions = [
       },
       {
         slug: 'reverse-engineering',
+        gallery: [
+          '/images/projects/image5.png',
+        ],
         title: 'Reverse Engineering & Legacy System Digitization Services',
         tagline: 'Digitize. Rebuild. Optimize. Extend Asset Life.',
         seoKeywords:
@@ -58,6 +67,14 @@ export const divisions = [
       },
       {
         slug: 'value-engineering-cost-reduction',
+        gallery: [
+          '/images/projects/image6.png',
+          '/images/projects/image7.png',
+          '/images/projects/image9.png',
+          '/images/projects/image8.png',
+          '/images/projects/image11.png',
+          '/images/projects/image10.png',
+        ],
         title: 'Value Engineering & Strategic Cost Optimization Services',
         tagline: 'Reduce Cost. Improve Performance. Increase Competitive Advantage.',
         seoKeywords:
@@ -81,6 +98,10 @@ export const divisions = [
       },
       {
         slug: 'feed-pid-development',
+        gallery: [
+          '/images/projects/image12.png',
+          '/images/projects/image13.png',
+        ],
         title: 'FEED Engineering & P&ID Design Services',
         tagline: 'Front-End Engineering Design for Risk-Free Capital Projects',
         seoKeywords:
@@ -104,6 +125,12 @@ export const divisions = [
       },
       {
         slug: 'skid-modular-systems',
+        gallery: [
+          '/images/projects/image15.png',
+          '/images/projects/image14.png',
+          '/images/projects/image16.png',
+          '/images/projects/image17.png',
+        ],
         title: 'Skid-Mounted & Modular Process System Engineering',
         tagline: 'Pre-Engineered, Transportable, Commission-Ready Systems',
         seoKeywords:
@@ -127,6 +154,12 @@ export const divisions = [
       },
       {
         slug: 'oil-gas-downstream-support',
+        gallery: [
+          '/images/projects/image18.jpg',
+          '/images/projects/image19.jpg',
+          '/images/projects/image20.jpeg',
+          '/images/projects/image13.png',
+        ],
         title: 'Oil & Gas Downstream Engineering Services',
         tagline: 'Engineering Excellence for Refining & Petrochemical Operations',
         seoKeywords:
@@ -150,6 +183,15 @@ export const divisions = [
       },
       {
         slug: 'fea-cfd-simulation',
+        gallery: [
+          '/images/projects/image22.png',
+          '/images/projects/image21.png',
+          '/images/projects/image24.png',
+          '/images/projects/image23.png',
+          '/images/projects/image26.png',
+          '/images/projects/image25.png',
+          '/images/projects/image27.png',
+        ],
         title: 'Advanced FEA & CFD Simulation Services',
         tagline: 'Engineering Simulation for Performance Validation & Risk Reduction',
         seoKeywords:
@@ -173,6 +215,14 @@ export const divisions = [
       },
       {
         slug: 'industrial-performance-optimization',
+        gallery: [
+          '/images/projects/image28.jpg',
+          '/images/projects/image30.jpeg',
+          '/images/projects/image29.jpeg',
+          '/images/projects/image31.jpeg',
+          '/images/projects/image32.jpeg',
+          '/images/projects/image33.jpeg',
+        ],
         title: 'Industrial Performance Optimization Services',
         tagline: 'Improve Efficiency. Increase Throughput. Reduce Operational Cost.',
         seoKeywords:
@@ -196,6 +246,13 @@ export const divisions = [
       },
       {
         slug: 'professional-cad-services',
+        gallery: [
+          '/images/projects/image35.jpeg',
+          '/images/projects/image34.png',
+          '/images/projects/image38.jpg',
+          '/images/projects/image37.jpeg',
+          '/images/projects/image36.jpeg',
+        ],
         title: 'Professional CAD Drafting & 3D Modeling Services',
         tagline: 'Accurate, Standards-Compliant Engineering Documentation',
         seoKeywords:
@@ -219,6 +276,15 @@ export const divisions = [
       },
       {
         slug: 'cad-migration-standardization',
+        gallery: [
+          '/images/projects/image44.png',
+          '/images/projects/image39.png',
+          '/images/projects/image43.png',
+          '/images/projects/image42.jpeg',
+          '/images/projects/image41.jpg',
+          '/images/projects/image40.png',
+          '/images/projects/image45.png',
+        ],
         title: 'CAD Migration & Engineering Data Standardization Services',
         tagline: 'Secure CAD Platform Transition with Data Integrity Assurance',
         seoKeywords:
@@ -255,6 +321,12 @@ export const divisions = [
     services: [
       {
         slug: 'mechanical-hydraulic-fixtures',
+        gallery: [
+          '/images/projects/image47.png',
+          '/images/projects/image46.jpg',
+          '/images/projects/image49.jpg',
+          '/images/projects/image48.png',
+        ],
         title: 'Mechanical & Hydraulic Fixture Design Services',
         tagline: 'High-Precision Fixtures for Reliable Production Performance',
         seoKeywords:
@@ -278,6 +350,13 @@ export const divisions = [
       },
       {
         slug: 'production-tooling-design',
+        gallery: [
+          '/images/projects/image51.jpeg',
+          '/images/projects/image50.jpg',
+          '/images/projects/image52.jpeg',
+          '/images/projects/image48.png',
+          '/images/projects/image46.jpg',
+        ],
         title: 'Production Tooling & Die Design Services',
         tagline: 'Precision Tooling for High-Volume Manufacturing',
         seoKeywords:
@@ -301,6 +380,13 @@ export const divisions = [
       },
       {
         slug: 'custom-machine-design-automation',
+        gallery: [
+          '/images/projects/image54.png',
+          '/images/projects/image53.png',
+          '/images/projects/image55.jpg',
+          '/images/projects/image18.jpg',
+          '/images/projects/image19.jpg',
+        ],
         title: 'Custom Industrial Machine Design & Automation Development',
         tagline: 'Engineered Machines Built for Performance & Scalability',
         seoKeywords:
@@ -324,6 +410,9 @@ export const divisions = [
       },
       {
         slug: 'assembly-automation-systems',
+        gallery: [
+          '/images/projects/gen_assembly_automation.png',
+        ],
         title: 'Assembly Line Automation & Robotics Integration',
         tagline: 'Smart Assembly Systems for High-Throughput Manufacturing',
         seoKeywords:
@@ -347,6 +436,9 @@ export const divisions = [
       },
       {
         slug: 'production-optimization',
+        gallery: [
+          '/images/projects/gen_production_optimization.png',
+        ],
         title: 'Production Optimization & Manufacturing Efficiency Services',
         tagline: 'Data-Driven Manufacturing Performance Improvement',
         seoKeywords:
@@ -370,6 +462,10 @@ export const divisions = [
       },
       {
         slug: 'lean-manufacturing-support',
+        gallery: [
+          '/images/projects/image56.png',
+          '/images/projects/gen_optimization_value.png',
+        ],
         title: 'Lean Manufacturing & Continuous Improvement Consulting',
         tagline: 'Operational Excellence Through Lean Transformation',
         seoKeywords:
@@ -406,6 +502,9 @@ export const divisions = [
     services: [
       {
         slug: 'digital-twin-engineering',
+        gallery: [
+          '/images/projects/gen_digital_twin.png',
+        ],
         title: 'Digital Twin Engineering Services',
         tagline: 'Real-time virtual replicas for smarter, faster, and safer industrial operations.',
         seoKeywords:
@@ -429,6 +528,9 @@ export const divisions = [
       },
       {
         slug: 'simulation-virtual-commissioning',
+        gallery: [
+          '/images/projects/gen_virtual_commissioning.png',
+        ],
         title: 'Simulation & Virtual Commissioning Services',
         tagline: 'Validate, optimize, and de-risk automation before physical deployment.',
         seoKeywords:
@@ -452,6 +554,10 @@ export const divisions = [
       },
       {
         slug: 'industrial-automation-control-systems',
+        gallery: [
+          '/images/projects/image56.png',
+          '/images/projects/gen_assembly_automation.png',
+        ],
         title: 'Industrial Automation & Control Systems',
         tagline: 'Intelligent automation engineered for reliability and performance.',
         seoKeywords:
@@ -475,6 +581,10 @@ export const divisions = [
       },
       {
         slug: 'industrial-robotics-integration',
+        gallery: [
+          '/images/projects/image58.jpg',
+          '/images/projects/image57.jpg',
+        ],
         title: 'Industrial Robotics Integration',
         tagline: 'Smart robotic solutions for agile, high-performance production.',
         seoKeywords:
@@ -498,6 +608,9 @@ export const divisions = [
       },
       {
         slug: 'industrial-data-ai-solutions',
+        gallery: [
+          '/images/projects/gen_industrial_ai_data.png',
+        ],
         title: 'Industrial Data & AI Solutions',
         tagline: 'Transform operational data into predictive, actionable intelligence.',
         seoKeywords:
@@ -521,6 +634,9 @@ export const divisions = [
       },
       {
         slug: 'computer-vision-inspection',
+        gallery: [
+          '/images/projects/gen_computer_vision.png',
+        ],
         title: 'AI-Powered Vision Inspection Systems',
         tagline: 'Precision quality control driven by intelligent vision technology.',
         seoKeywords:
@@ -544,6 +660,9 @@ export const divisions = [
       },
       {
         slug: 'industrial-ai-decision-systems',
+        gallery: [
+          '/images/projects/gen_ai_decision_systems.png',
+        ],
         title: 'Industrial AI & Decision Intelligence',
         tagline: 'Autonomous decision systems for optimized industrial performance.',
         seoKeywords:
@@ -580,6 +699,9 @@ export const divisions = [
     services: [
       {
         slug: 'engineering-consulting',
+        gallery: [
+          '/images/projects/gen_engineering_consulting.png',
+        ],
         title: 'Engineering Consulting',
         tagline: 'Independent technical advisory, expert reviews, and standards development',
         seoKeywords:
@@ -603,6 +725,9 @@ export const divisions = [
       },
       {
         slug: 'plant-modernization-strategy',
+        gallery: [
+          '/images/projects/gen_plant_modernization.png',
+        ],
         title: 'Plant Modernization Strategy',
         tagline: 'Asset modernization and industrial transformation roadmaps',
         seoKeywords:
@@ -626,6 +751,9 @@ export const divisions = [
       },
       {
         slug: 'digital-transformation-consulting',
+        gallery: [
+          '/images/projects/gen_digital_transformation.png',
+        ],
         title: 'Digital Transformation',
         tagline: 'Industry 4.0 strategy and enterprise digital enablement',
         seoKeywords:
@@ -649,6 +777,9 @@ export const divisions = [
       },
       {
         slug: 'optimization-value-engineering',
+        gallery: [
+          '/images/projects/gen_optimization_value.png',
+        ],
         title: 'Optimization & Value Engineering',
         tagline: 'Operational excellence with measurable business impact',
         seoKeywords:

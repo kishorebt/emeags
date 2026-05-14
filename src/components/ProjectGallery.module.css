@@ -1,0 +1,260 @@
+/* ─── Section wrapper ─── */
+.section {
+  padding: 3rem 0 2rem;
+}
+
+.heading {
+  margin-bottom: 2rem;
+}
+
+.label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted, #999);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary, #111);
+}
+
+.titleBar {
+  width: 44px;
+  height: 3px;
+  border-radius: 99px;
+}
+
+/* ─── Uniform grid — all tiles exactly the same height ─── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 220px;          /* fixed row height — every tile identical */
+  gap: 0.65rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 190px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 150px;
+  }
+}
+
+/* ─── Tile ─── */
+.tile {
+  position: relative;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e8e8e8;
+  display: block;
+  width: 100%;
+  /* height is driven by grid-auto-rows — every tile equal */
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.28s ease;
+}
+
+.tile:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
+  z-index: 1;
+}
+
+.tile:hover .tile__overlay {
+  opacity: 1;
+}
+
+.tile:hover .tile__img {
+  transform: scale(1.06);
+}
+
+/* accent border ring on hover */
+.tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid var(--accent, #2E6FBF);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.tile:hover::after {
+  opacity: 1;
+}
+
+.tile__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;        /* fills the grid cell completely */
+  overflow: hidden;
+}
+
+.tile__img {
+  object-fit: cover;   /* crops to fill — all tiles look the same size */
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tile__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 1;
+}
+
+/* ─── Lightbox — must be above navbar (z-index: 1001) ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  /* sit above navbar (z-index 1001) and everything else */
+  z-index: 999999;
+  background: rgba(4, 4, 10, 0.97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lb-in 0.22s ease forwards;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lightbox__closing {
+  animation: lb-out 0.22s ease forwards;
+}
+
+@keyframes lb-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes lb-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Lightbox image wrapper ─── */
+.lb__img_wrap {
+  position: relative;
+  width: min(88vw, 1080px);
+  height: min(78vh, 680px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65);
+  animation: lb-scale-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  /* prevent clicks from closing the lightbox when clicking image */
+}
+
+@keyframes lb-scale-in {
+  from { transform: scale(0.91); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.lb__img {
+  object-fit: contain;
+}
+
+/* ─── Close button ─── */
+.lb__close {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000000;          /* above the lightbox overlay */
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.lb__close:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ─── Prev / Next nav buttons ─── */
+.lb__nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000000;
+  transition: background 0.2s ease;
+}
+.lb__nav:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.lb__prev {
+  left: 1.25rem;
+}
+.lb__prev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.lb__next {
+  right: 1.25rem;
+}
+.lb__next:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* ─── Counter pill ─── */
+.lb__counter {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.9rem;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.06em;
+  z-index: 1000000;
+}
+
+.lb__counter_sep {
+  color: rgba(255, 255, 255, 0.28);
+}
